@@ -1,23 +1,46 @@
 <?php
 
-/*
-PayPal.php provides very simple access to PayPal's NVP API.
-
-It is heavily inspired by Mahmoud Al-Qudsi's paypalnvp-php
-See https://github.com/NeoSmart/paypalnvp-php
-
-PayPal NVP API: https://developer.paypal.com/webapps/developer/docs/classic/api/merchant/DoExpressCheckoutPayment_API_Operation_NVP/
-
-For implementation examples, start see payment.php.
-*/
-
 class PayPal {
 
-    private $version = "87.0";
-    private $config;
+    private $USER;
+    private $PWD;
+    private $SIGNATURE;
+    private $VERSION;
+    private $SANDBOX;
+    private $ENDPOINT;
 
-    public function __construct($config) {
-        $this->config = $config;
+    public function __construct(
+        string $USER, 
+        string $PWD, 
+        string $SIGNATURE, 
+        string $VERSION = "204.0", 
+        bool $SANDBOX   = false
+    ) {
+
+        $this->VERSION   = $VERSION;
+        $this->USER      = $USER;
+        $this->PWD       = $PWD;
+        $this->SIGNATURE = $SIGNATURE;
+        $this->VERSION   = $VERSION;
+        $this->SANDBOX   = $SANDBOX;
+
+        $this->ENDPOINT = 'https://api-3t.paypal.com/nvp';
+        if ($this->SANDBOX) {
+            $this->ENDPOINT = 'https://api-3t.sandbox.paypal.com/nvp';
+        }
+
+    }
+
+    /**
+    * Sets the value of version.
+    *
+    * @param mixed $version the version
+    *
+    * @return self
+    */
+    public function set_version($version) {
+        $this->version = $version;
+        return $this;
     }
 
     private function encodeNvpString($fields) {
@@ -29,7 +52,7 @@ class PayPal {
     }
 
     private function decodeNvpString($nvpstr) {
-        $pairs = explode("&", $nvpstr);
+        $pairs  = explode("&", $nvpstr);
         $fields = array();
         foreach ($pairs as $pair) {
             $items = explode("=", $pair);
@@ -39,14 +62,15 @@ class PayPal {
     }
 
     private function nvpAction($method, $requestFields) {
-        $requestFields["USER"]      = $this->config["username"];
-        $requestFields["PWD"]       = $this->config["password"];
-        $requestFields["SIGNATURE"] = $this->config["signature"];
-        $requestFields["VERSION"]   = $this->version;
+
         $requestFields["METHOD"]    = $method;
+        $requestFields["USER"]      = $this->USER;
+        $requestFields["PWD"]       = $this->PWD;
+        $requestFields["SIGNATURE"] = $this->SIGNATURE;
+        $requestFields["VERSION"]   = $this->VERSION;
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config["endpoint"]);
+        curl_setopt($ch, CURLOPT_URL, $this->ENDPOINT);
         curl_setopt($ch, CURLOPT_VERBOSE, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
@@ -63,6 +87,7 @@ class PayPal {
     public function __call($method, $args) {
         return $this->nvpAction($method, $args[0]);
     }
+
 }
 
 ?>
