@@ -31,18 +31,6 @@ class PayPal {
 
     }
 
-    /**
-    * Sets the value of version.
-    *
-    * @param mixed $version the version
-    *
-    * @return self
-    */
-    public function set_version($version) {
-        $this->version = $version;
-        return $this;
-    }
-
     private function encodeNvpString($fields) {
         $nvpstr = "";
         foreach ($fields as $key=>$value) {
