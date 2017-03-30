@@ -10,11 +10,11 @@ class PayPal {
     private $ENDPOINT;
 
     public function __construct(
-        string $USER, 
-        string $PWD, 
-        string $SIGNATURE, 
-        string $VERSION = "204.0", 
-        bool $SANDBOX   = false
+        $USER, 
+        $PWD, 
+        $SIGNATURE, 
+        $VERSION = "204.0", 
+        $SANDBOX = false
     ) {
 
         $this->VERSION   = $VERSION;
