@@ -13,9 +13,9 @@ class PayPal {
     public function __construct(
         $USER, 
         $PWD, 
-        $SIGNATURE, 
-        $VERSION = "204.0", 
-        $SANDBOX = false
+        $SIGNATURE,  
+        $SANDBOX = false,
+        $VERSION = "204.0"
     ) {
 
         $this->VERSION   = $VERSION;
