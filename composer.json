@@ -1,0 +1,11 @@
+{
+    "name": "delmicio/PHP-PayPal-NVP",
+    "type": "library",
+    "description": "",
+    "keywords": ["php","paypal", "nvp"],
+    "homepage": "https://github.com/delmicio/PHP-PayPal-NVP",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.29"
+    }
+}
